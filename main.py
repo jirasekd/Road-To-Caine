@@ -1,0 +1,109 @@
+
+def create_environment():
+    environment = {
+        "time": "day",
+        "weather": "rainy"
+    }
+
+    return environment
+
+
+def create_agent():
+    attributes = {
+        "name": "Caine",
+        "energy": 60,
+        "max_energy": 100,
+        "energy_loss": 10,
+        "location": "Main Hall",
+        "actions_taken": 0,
+        "goal": "Explore"
+    }
+
+    return attributes
+
+
+def observe(environment):
+    return environment
+
+
+def update_energy(attributes, amount):
+    attributes["energy"] += amount
+
+    if attributes["energy"] > attributes["max_energy"]:
+        attributes["energy"] = attributes["max_energy"]
+
+    if attributes["energy"] < 0:
+        attributes["energy"] = 0
+
+
+def think(environment, attributes):
+    print(f"\nCurrent goal: {attributes['goal']}")
+
+    if attributes["energy"] < 30:
+        attributes["goal"] = "Rest"
+
+    if attributes["goal"] == "Rest":
+        return "Rest"
+
+    if attributes["goal"] == "Explore":
+        if environment["weather"] == "rainy":
+            return "Stay inside"
+
+        return "Explore"
+
+    if attributes["goal"] == "Observe":
+        return "Observe surroundings"
+
+    return "Do nothing"
+
+
+def act(decision, attributes):
+    print(f"{attributes['name']} decides: {decision}")
+
+    if decision == "Rest":
+        update_energy(
+            attributes,
+            attributes["max_energy"] - attributes["energy"]
+        )
+        print("Caine has rested and recovered his energy.")
+
+    elif decision == "Stay inside":
+        update_energy(attributes, -attributes["energy_loss"])
+        attributes["actions_taken"] += 1
+        print(f"Energy: -{attributes['energy_loss']}")
+
+    elif decision == "Explore":
+        update_energy(attributes, -attributes["energy_loss"])
+        attributes["actions_taken"] += 1
+        print(f"Energy: -{attributes['energy_loss']}")
+
+    elif decision == "Observe surroundings":
+        attributes["actions_taken"] += 1
+        print("Caine looks around the Main Hall.")
+
+    print(f"Energy remaining: {attributes['energy']}")
+    print(f"Actions taken: {attributes['actions_taken']}")
+
+
+# Initialize the environment and agent once
+environment = create_environment()
+attributes = create_agent()
+
+# Main agent loop
+while True:
+    current_environment = observe(environment)
+
+    print("\n--- Current State ---")
+    print("Environment:", current_environment)
+    print("Agent:", attributes)
+
+    decision = think(current_environment, attributes)
+
+    act(decision, attributes)
+
+    if attributes["energy"] == attributes["max_energy"]:
+        attributes["goal"] = "Explore"
+
+    if attributes["actions_taken"] >= 10:
+        print("\nExperiment finished: 10 actions completed.")
+        break
