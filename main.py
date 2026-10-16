@@ -45,6 +45,8 @@ def update_energy(attributes, amount):
 
 def think(environment, attributes):
 
+    memory = attributes["memory"]
+    
     if attributes["energy"] > 30:
 
         if environment["weather"] == "clear":
@@ -60,13 +62,20 @@ def think(environment, attributes):
         attributes["goal"] = "Rest"
 
     elif attributes["energy"] == 30:
+        
         energy_check = random.randint(0,1)
         print(f"Energy check complete, result: {energy_check}")
+        
         if energy_check == 1 and environment["weather"] == "clear":
+            
             attributes["goal"] = "Explore"
+            
         elif energy_check == 1 and environment["weather"] == "rainy":
+            
             attributes["goal"] = "Observe"
+        
         if energy_check == 0:
+            
             attributes["goal"] = "Rest"
             
     if attributes["goal"] == "Rest":
@@ -75,11 +84,24 @@ def think(environment, attributes):
 
     elif attributes["goal"] == "Observe":
 
-        return "Observe surroundings"
+        if memory.count("Observed") < 3:
+
+            return "Observe surroundings"
+        
+        else:
+            
+            return "Explore"
+    
 
     elif attributes["goal"] == "Explore":
 
-        return "Explore"
+        if memory.count("Explored") < 3:
+
+            return "Explore"
+        
+        else:
+            
+            return "Observe surroundings"
 
     return "Do nothing"
         
