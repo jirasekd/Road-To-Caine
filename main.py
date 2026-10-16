@@ -131,7 +131,7 @@ def act(decision, attributes):
         update_energy(attributes, -attributes["energy_loss"]/2)
         memory.append("Observed")
         attributes["actions_taken"] += 1
-        print(f"Energy: -{attributes['energy_loss']}")
+        print(f"Energy: -{attributes['energy_loss']/2}")
         print("Caine looks around the Main Hall.")
 
     print(f"Energy remaining: {attributes['energy']}")
