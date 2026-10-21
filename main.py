@@ -46,7 +46,8 @@ def update_energy(attributes, amount):
 def think(environment, attributes):
 
     memory = attributes["memory"]
-    
+    recent_memory = memory[-3:]
+
     if attributes["energy"] > 30:
 
         if environment["weather"] == "clear":
@@ -84,7 +85,7 @@ def think(environment, attributes):
 
     elif attributes["goal"] == "Observe":
 
-        if memory.count("Observed") < 3:
+        if recent_memory.count("Observed") < 2:
 
             return "Observe surroundings"
         
@@ -95,7 +96,7 @@ def think(environment, attributes):
 
     elif attributes["goal"] == "Explore":
 
-        if memory.count("Explored") < 3:
+        if recent_memory.count("Explored") < 2:
 
             return "Explore"
         
@@ -158,5 +159,3 @@ while True:
     if attributes["actions_taken"] >= 25:
         print("\nExperiment finished: 25 actions completed.")
         break
-
-#CHATGPT - continue
